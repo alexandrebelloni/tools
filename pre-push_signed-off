@@ -1,0 +1,50 @@
+#!/bin/bash 
+
+remote="$1"
+url="$2"
+protected_remote='kernel.org'
+protected_branch='(at91-|rtc-).*'
+
+if [ $remote != $protected_remote ]; then
+	exit 0
+fi
+
+#   <local ref> <local sha1> <remote ref> <remote sha1>
+z40=0000000000000000000000000000000000000000
+
+check_update() {
+	remote_ref=$1
+	local_sha=$2
+	remote_sha=$3
+
+	if [[ ! $(basename $remote_ref) =~ $protected_branch ]]; then
+		return
+	fi
+
+	echo Running Signed-off check for $remote $remote_ref
+
+	if [ "$local_sha" = $z40 ]; then
+		return
+	fi
+
+	if [ "$remote_sha" = $z40 ]; then
+		range="$local_sha"
+	else
+		range="$remote_sha..$local_sha"
+	fi
+
+	for commit in $(git rev-list $range); do
+		SOB=$(git log -1 $commit | grep "Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>")
+		if [ -z "$SOB" ]; then
+			echo "Signed-off not in $commit"
+			exit 1
+		fi
+	done
+}
+
+while read local_ref local_sha remote_ref remote_sha
+do
+	check_update $remote_ref $local_sha $remote_sha
+done
+
+exit 0
