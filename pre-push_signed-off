@@ -4,6 +4,7 @@ remote="$1"
 url="$2"
 protected_remote='kernel.org'
 protected_branch='(at91-|rtc-).*'
+committer='Alexandre Belloni <alexandre.belloni@free-electrons.com>'
 
 if [ $remote != $protected_remote ]; then
 	exit 0
@@ -17,12 +18,11 @@ check_update() {
 	local_sha=$2
 	remote_sha=$3
 
-	if [[ ! $(basename $remote_ref) =~ $protected_branch ]]; then
+	if [[ ! $remote_ref =~ refs/heads/$protected_branch ]]; then
 		return
 	fi
 
 	echo Running Signed-off check for $remote $remote_ref
-
 	if [ "$local_sha" = $z40 ]; then
 		return
 	fi
@@ -34,7 +34,11 @@ check_update() {
 	fi
 
 	for commit in $(git rev-list $range); do
-		SOB=$(git log -1 $commit | grep "Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>")
+		COMMITTER=$(git log -1 --pretty="%cn <%ce>" $commit)
+		if [ "$COMMITTER" != "$committer" ]; then
+			continue
+		fi
+		SOB=$(git log -1 --pretty="%b" $commit | grep "Signed-off-by: $committer")
 		if [ -z "$SOB" ]; then
 			echo "Signed-off not in $commit"
 			exit 1
