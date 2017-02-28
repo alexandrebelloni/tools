@@ -9,21 +9,24 @@ FE = {}
 versions=[]
 
 map_authors = {
-        'michael@free-electrons.com': 'michael.opdenacker@free-electrons.com',
-        }
+    'michael@free-electrons.com': 'michael.opdenacker@free-electrons.com',
+    'michael-lists@free-electrons.com': 'michael.opdenacker@free-electrons.com',
+}
 
 def makever(v):
     s=v.split('.')
     return 1000*int(s[0][1:])+int(s[1])
 
-def add_commit(author, sob):
+def add_commit(author, ver, sob):
+    if ver == 'v2.6.39':
+        ver = 'v2.6.x'
     if author in map_authors:
         author = map_authors[author]
     if author not in FE:
         FE[author] = {}
-    if cur not in FE[author]:
-        FE[author][cur] = [0, 0]
-    FE[author][cur][sob] += 1
+    if ver not in FE[author]:
+        FE[author][ver] = [0, 0]
+    FE[author][ver][sob] += 1
 
 
 vcmd=["git", "tag", "-l", 'v[3-9].[0-9]', "-l", 'v[3-9].[0-9][0-9]']
@@ -38,6 +41,7 @@ for line in v.stdout:
 #for i in range(18,39):
 #    versions.append("v2.6.%d" % (i))
 
+versions.append("v2.6.11")
 versions.append("v2.6.39")
 v=sorted(versions, key=makever)
 v.append('HEAD')
@@ -46,6 +50,7 @@ v.append('HEAD')
 logcmd=["git", "log", "%s..%s"]
 prev=v[0]
 for cur in v[1:]:
+    print cur
     version = "%s..%s" % (prev, cur)
     logcmd = logcmd[:-1]
     logcmd.append(version)
@@ -78,12 +83,13 @@ for cur in v[1:]:
             continue
 
         if author and "@free-electrons.com" in author:
-            add_commit(author, 0)
+            add_commit(author, cur, 0)
 
         if sob and sob != author and "@free-electrons.com" in sob:
-            add_commit(sob, 1)
+            add_commit(sob, cur, 1)
 
     prev = cur
 
+v[1] = 'v2.6.x'
 with open('gitdm.dump', 'w') as f:
     pickle.dump((v[1:], FE), f, pickle.HIGHEST_PROTOCOL)
