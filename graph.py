@@ -71,9 +71,10 @@ for u in sorted(FE):
 
     ax2 = ax1.twinx()
     lim = ax1.get_ylim()
+    ratio = int(max(sob_c[-1], commits_c[-1])/(lim[1] * 10)) + 1
     lim = (lim[0], lim[1]*1.05)
     ax1.set_ylim(lim)
-    lim = (lim[0], lim[1]*10)
+    lim = (lim[0], lim[1] * 10 * ratio)
     ax2.set_ylim(lim)
     cc = ax2.plot(commits_c, color='darkorange')
     if sob_c[-1] > 0:
@@ -119,17 +120,18 @@ for u in sorted(FE):
     bottom_sc = map(lambda x,y:x+y, bottom_sc, sob_c)
 
 lim = axt1.get_ylim()
+ratio = int(max(bottom_cc[-1], bottom_sc[-1])/(lim[1] * 10)) + 1
 lim = (lim[0], lim[1]*1.05)
 axt1.set_ylim(lim)
-lim = (lim[0], lim[1]*10)
+lim = (lim[0], lim[1]*10*ratio)
 axt2.set_ylim(lim)
 axt2.plot(bottom_cc, color='darkorange')
 axt2.plot(bottom_sc, color='blue')
 axt1.legend(lc, ll, loc=2, ncol=2)
 off = 0
-if sob_c[-1] > 0 and abs(commits_c[-1] - sob_c[-1]) < 25:
+if bottom_sc[-1] > 0 and abs(bottom_cc[-1] - bottom_sc[-1]) < 25:
     off = 10
-if commits_c[-1] < sob_c[-1]:
+if bottom_cc[-1] < bottom_sc[-1]:
     off = -off
 plt.text(len(versions) - 0.5, bottom_cc[-1] + off, bottom_cc[-1])
 if sob_c[-1] > 0:
