@@ -12,7 +12,7 @@ def autolabel(rects, ax):
                 '%d' % int(height),
                 ha='center', va='bottom')
 
-with open("gitdm.dump", 'r') as f:
+with open("gitdm.dump", 'rb') as f:
     (versions, FE) = pickle.load(f)
 
 ind = np.arange(len(versions))
