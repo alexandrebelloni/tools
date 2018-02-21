@@ -9,8 +9,32 @@ FE = {}
 versions=[]
 
 map_authors = {
-    'michael@free-electrons.com': 'michael.opdenacker@free-electrons.com',
-    'michael-lists@free-electrons.com': 'michael.opdenacker@free-electrons.com',
+        'albin.tonnerre@free-electrons.com': 'Albin Tonnerre',
+        'alexandre.belloni@bootlin.com': 'Alexandre Belloni',
+        'alexandre.belloni@free-electrons.com': 'Alexandre Belloni',
+        'antoine.tenart@bootlin.com': 'Antoine Tenart',
+        'antoine.tenart@free-electrons.com': 'Antoine Tenart',
+        'boris.brezillon@bootlin.com': 'Boris Brezillon',
+        'boris.brezillon@free-electrons.com': 'Boris Brezillon',
+        'david.wagner@free-electrons.com': 'David Wagner',
+        'ezequiel.garcia@free-electrons.com': 'Ezequiel Garcia',
+        'gregory.clement@bootlin.com': 'Gregory Clement',
+        'gregory.clement@free-electrons.com': 'Gregory Clement',
+        'maxime.ripard@bootlin.com': 'Maxime Ripard',
+        'maxime.ripard@free-electrons.com': 'Maxime Ripard',
+        'michael@free-electrons.com': 'Michael Opdenacker',
+        'michael-lists@free-electrons.com': 'Michael Opdenacker',
+        'michael.opdenacker@bootlin.com': 'Michael Opdenacker',
+        'michael.opdenacker@free-electrons.com': 'Michael Opdenacker',
+        'miquel.raynal@bootlin.com': 'Miquel Raynal',
+        'miquel.raynal@free-electrons.com': 'Miquel Raynal',
+        'mylene.josserand@bootlin.com': 'Mylene Josserand',
+        'mylene.josserand@free-electrons.com': 'Mylene Josserand',
+        'quentin.schulz@bootlin.com': 'Quentin Schulz',
+        'quentin.schulz@free-electrons.com': 'Quentin Schulz',
+        'romain.perier@free-electrons.com': 'Romain Perier',
+        'thomas.petazzoni@bootlin.com': 'Thomas Petazzoni',
+        'thomas.petazzoni@free-electrons.com': 'Thomas Petazzoni',
 }
 
 def makever(v):
@@ -82,10 +106,13 @@ for cur in v[1:]:
         if merge:
             continue
 
-        if author and "@free-electrons.com" in author:
+        if author and (("free-electrons.com" in author) or ("bootlin.com" in author)) and not author in map_authors:
+            print "missing " + author
+
+        if author and author in map_authors:
             add_commit(author, cur, 0)
 
-        if sob and sob != author and "@free-electrons.com" in sob:
+        if sob and sob != author and sob in map_authors:
             add_commit(sob, cur, 1)
 
     prev = cur

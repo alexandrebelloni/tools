@@ -38,6 +38,7 @@ colors = [
     'lightgray',
     'seagreen',
     'b',
+    'tan'
 ]
 
 ci = 0
@@ -138,5 +139,5 @@ if sob_c[-1] > 0:
     plt.text(len(versions) - 0.5, bottom_sc[-1] - off, bottom_sc[-1])
 
 figt.tight_layout()
-plt.savefig("free-electrons.png", dpi=100)
+plt.savefig("bootlin.png", dpi=100)
 plt.close(figt)
