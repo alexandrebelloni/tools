@@ -2,11 +2,11 @@
 
 remote="$1"
 url="$2"
-protected_remote='kernel.org'
+protected_remote='(kernel.org|microchip-at91)'
 protected_branch='(at91-|rtc-).*'
 committer='Alexandre Belloni <alexandre.belloni@bootlin.com>'
 
-if [ $remote != $protected_remote ]; then
+if [[ ! $remote =~ $protected_remote ]]; then
 	exit 0
 fi
 
