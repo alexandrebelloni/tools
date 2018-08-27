@@ -38,7 +38,9 @@ colors = [
     'lightgray',
     'seagreen',
     'b',
-    'tan'
+    'tan',
+    'chocolate',
+    'black'
 ]
 
 ci = 0
@@ -109,8 +111,10 @@ for u in sorted(FE):
     plt.close(fig)
 
     plt.figure(figt.number)
-    ct = axt1.bar(ind - width, commits, width, align='edge', bottom=bottom_c, color=colors[ci])
-    axt1.bar(ind, sob, width, align='edge', bottom=bottom_s, color=colors[ci])
+    #ct = axt1.bar(ind - width, commits, width, align='edge', bottom=bottom_c, color=colors[ci])
+    #axt1.bar(ind, sob, width, align='edge', bottom=bottom_s, color=colors[ci])
+    ct = axt1.bar(ind - width, commits, width, align='edge', bottom=bottom_c, color='orange')
+    axt1.bar(ind, sob, width, align='edge', bottom=bottom_s, color='dodgerblue')
 
     lc.append(ct[0])
     ll.append(u)
@@ -128,7 +132,7 @@ lim = (lim[0], lim[1]*10*ratio)
 axt2.set_ylim(lim)
 axt2.plot(bottom_cc, color='darkorange')
 axt2.plot(bottom_sc, color='blue')
-axt1.legend(lc, ll, loc=2, ncol=2)
+#axt1.legend(lc, ll, loc=2, ncol=2)
 off = 0
 if bottom_sc[-1] > 0 and abs(bottom_cc[-1] - bottom_sc[-1]) < 25:
     off = 10
